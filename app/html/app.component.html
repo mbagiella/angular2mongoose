@@ -1,0 +1,55 @@
+<nav class="navbar navbar-default">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <a class="navbar-brand" href="#">
+                <i class="glyphicon glyphicon-home"></i> {{title}}
+            </a>
+        </div>
+    </div>
+</nav>
+<div class="container">
+
+    <div class="panel panel-default">
+        <div class="panel-heading"><i class="glyphicon glyphicon-user"></i> User Management</div>
+        <div class="panel-body">
+            <user-form [user]="selectedUser"
+                       (save)="save($event)"
+                       (cancel)="cancel()"
+                       (add)="add($event)"
+                       (remove)="remove($event)"
+            ></user-form>
+
+            <div *ngIf="directory?.length > 0">
+                List ({{directory?.length}})
+                <div class="input-group">
+                    <span class="input-group-addon"><i class="glyphicon glyphicon-refresh"(click)="reload()"></i></span>
+                    <input type="text" class="form-control" [(ngModel)]="search" placeholder="Search" aria-describedby="basic-addon1">
+                    <span class="input-group-addon" id="basic-addon1"><i class="glyphicon glyphicon-search"></i></span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <table class="table table-hover" *ngIf="directory?.length > 0">
+        <thead>
+        <th>#_id</th>
+        <th>Name</th>
+        <th>Surname</th>
+        <th>Action</th>
+        </thead>
+        <tbody>
+        <tr #elem
+            [ngClass]="selectedClass(user)"
+            *ngFor="#user of directory | SearchName:search"
+            (click)="select(user)">
+            <td>{{user._id}}</td>
+            <td>{{user.name}}</td>
+            <td>{{user.surname}}</td>
+            <td>
+                <button class="btn btn-sm btn-danger" (click)="remove(user,elem)">
+                    <span class="glyphicon glyphicon-trash"></span>
+                </button>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
